@@ -24,17 +24,25 @@ axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.withCredentials = true
 
 router.beforeEach((to, from) => {
-  const token = localStorage.getItem('token')
-  console.log(token, 'token')
-  // 非登陆页面token不存在
-  if (to.path !== '/login' && !token) {
-    return '/login'
-  } else if (token && to.path === '/login') {
-    // 已登录状态访问login跳转首页
-    return '/dashboard'
-  } else {
-    return true
+  console.log('开始验证token')
+  // 1. 先处理localStorage返回undefined的情况
+  let token = localStorage.getItem('token')
+  if (token === 'undefined' || token === 'null') {
+    token = null
+    localStorage.removeItem('token'); // 清除异常值
   }
+  console.log('处理后token值:', token, '目标路径:', to.path)
+    // 2. 有效token的判断：非null/undefined + 非空字符串
+  const hasValidToken = !!token && token.trim() !== ''
+  // 非登陆页面token不存在
+  if (to.path !== '/login' && !hasValidToken) {
+    console.log('返回登录页面')
+    return '/login'
+  } else if (hasValidToken && to.path === '/login') {
+    console.log('跳转首页页面')
+    // 已登录状态访问login跳转首页
+    return '/'
+  } 
 })
 
 // 创建vue实例

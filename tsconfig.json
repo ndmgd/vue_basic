@@ -7,5 +7,10 @@
     {
       "path": "./tsconfig.app.json"
     }
-  ]
+  ],
+  // 增加模块解析选项
+  "compilerOptions": {
+  "module": "esnext", // 或 "es2020"、"es2022"、"nodenext" 等
+  "moduleResolution": "bundler" // 配合 Vite 建议加这行（Vite 是打包工具）
+}
 }

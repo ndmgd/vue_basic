@@ -121,8 +121,8 @@ const submitForm = async (formEl: any) => {
             ElMessage.success('登录成功')
             console.log(data)
             // 将token和用户信息缓存到浏览器
-            localStorage.setItem('token', data.data.token)
-            localStorage.setItem('userInfo', JSON.stringify(data.data.userInfo))
+            localStorage.setItem('token', data.data.data.token)
+            localStorage.setItem('userInfo', JSON.stringify(data.data.data.userInfo))
             // 跳转到首页
             router.push('/')
           }
