@@ -59,4 +59,4 @@ npm run test:e2e -- tests/example.spec.ts
 # Runs the tests in debug mode
 npm run test:e2e -- --debug
 ```
-尝试修改
+修改了vscode连接github的配置，从https变成ssh方式
