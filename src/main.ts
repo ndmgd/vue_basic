@@ -17,7 +17,7 @@ import 'element-plus/dist/index.css'
 import 'virtual:windi.css'
 
 import store from './stores'
-
+import panelHead from './components/panelHead.vue'
 // 配置后端基础URL
 axios.defaults.baseURL = 'http://localhost:8080'
 // 允许跨域携带cookie
@@ -59,6 +59,8 @@ app.use(ElementPlus)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+// 注册全局组件,头部
+app.component('panel-head', panelHead)
 // 将store挂载到vue实例上
 app.use(store)
 app.mount('#app')

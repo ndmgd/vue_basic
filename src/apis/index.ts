@@ -17,9 +17,27 @@ export const login = (data: any) => {
 
 // 账号管理
 export const authAdmin = (params: any) => {
-  return request.get('/auth/admin', params)
+  return request.get('/auth/admin', { params })
 }
 
+// 获取菜单权限
+export const userGetMenu = () => {
+    return request.get('/user/getmenu')
+}
+// 创建菜单权限
+export const userSetmenu = (data: any) => {
+    return request.post('/user/setmenu', data)
+}
+
+// 菜单列表数据
+export const menuList = (params:any) => {
+    return request.get('/menu/list', { params })
+}
+
+// 菜单权限下拉列表
+export const menuSelectList = () => {
+    return request.get('/menu/selectlist')
+}
 // 验证码验证
 // export const authentication = (data) => {
 //     return request.post('/user/authentication', data)
