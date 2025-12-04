@@ -38,6 +38,10 @@ export const menuList = (params:any) => {
 export const menuSelectList = () => {
     return request.get('/menu/selectlist')
 }
+// 用户信息修改
+export const updateAuth = (data:any) => {
+    return request.post('/update/user', data)
+}
 // 验证码验证
 // export const authentication = (data) => {
 //     return request.post('/user/authentication', data)
