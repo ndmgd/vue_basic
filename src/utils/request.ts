@@ -33,14 +33,16 @@ http.interceptors.response.use(
       ElMessage.warning(response.data.message)
     }
     // token失效
-    // if (response.data.code === -2) {
-    //   // 清除token
-    //   localStorage.removeItem('token')
-    //   // 清除用户信息
-    //   localStorage.removeItem('userInfo')
-    //   // 跳转到登录页
-    //   window.location.href = window.location.origin
-    // }
+    if (response.data.code === -2) {
+      // 清除token
+      localStorage.removeItem('token')
+      // 清除用户信息
+      localStorage.removeItem('userInfo')
+      // 清楚持久化信息
+      localStorage.removeItem('pz_vuex')
+      // 跳转到登录页
+      window.location.href = window.location.origin
+    }
     return response
   },
   function (error) {

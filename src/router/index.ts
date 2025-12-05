@@ -8,6 +8,7 @@ import Order from '@/views/vppz/order/index.vue'
 import Staff from '@/views/vppz/staff/index.vue'
 import Dashboard from '@/views/dashboard/index.vue'
 
+
 const mockRoutes = [
   {
     path: 'dashboard',
@@ -85,7 +86,9 @@ const routes = [
     path: '/',
     name: 'main',
     component: Layout,
-    children: mockRoutes,
+    // children: mockRoutes,
+    // 动态渲染子路由
+    children:[]
   },
   {
     path: '/login',
@@ -96,5 +99,6 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
 })
+
 
 export default router

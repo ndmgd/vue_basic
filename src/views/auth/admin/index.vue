@@ -1,6 +1,6 @@
 <template>
   <div>
-    <panel-head />
+    <panel-head :route="route" />
     <el-table :data="tableData.list" stripe style="width: 100%">
       <el-table-column label="id" prop="id" />
       <el-table-column label="昵称" prop="name" />
@@ -68,6 +68,8 @@
   import dayjs from 'dayjs'
   import { useRoute } from 'vue-router'
 
+  const route = useRoute()
+  console.log('route', route)
   //绑定菜单树形数据
   onMounted(() => {
     getListData()

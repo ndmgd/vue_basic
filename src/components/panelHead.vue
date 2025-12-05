@@ -1,14 +1,14 @@
 <template>
     <div class="panel-heading">
         <div class="panel-lead">
-            <div class="title">菜单</div>
-            <p class="description">你好</p>
+            <div class="title">{{ props.route.meta.name }}</div>
+            <p class="description">{{ props.route.meta.describe }}</p>
         </div>
     </div>
 </template>
 <script setup lang="ts">
     const props = defineProps({
-        info: {
+        route: {
             type: Object
         },
     })

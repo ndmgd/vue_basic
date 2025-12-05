@@ -42,15 +42,17 @@ export const menuSelectList = () => {
 export const updateAuth = (data:any) => {
     return request.post('/update/user', data)
 }
+
+// 菜单权限
+export const menuPermissions = (params:any) => {
+    return request.get('/menu/permissions', { params })
+}
 // 验证码验证
 // export const authentication = (data) => {
 //     return request.post('/user/authentication', data)
 // }
 
-// // 登录
-// export const login = (data) => {
-//     return request.post('/login', data)
-// }
+
 
 // // 账号管理
 // export const authAdmin = (params={}) => {
@@ -81,30 +83,15 @@ export const updateAuth = (data:any) => {
 //     return request.post('/delete/companion', data)
 // }
 
-// // 获取菜单权限
-// export const userGetMenu = () => {
-//     return request.get('/user/getmenu')
-// }
 
-// // 创建菜单权限
-// export const userSetmenu = (data) => {
-//     return request.post('/user/setmenu', data)
-// }
 
-// // 菜单列表数据
-// export const menuList = (params) => {
-//     return request.get('/menu/list', { params })
-// }
 
-// // 菜单权限下拉列表
-// export const menuSelectList = () => {
-//     return request.get('/menu/selectlist')
-// }
 
-// // 用户信息修改
-// export const updateAuth = (data) => {
-//     return request.post('/update/user', data)
-// }
+
+
+
+
+
 
 // // 订单列表
 
@@ -118,7 +105,4 @@ export const updateAuth = (data:any) => {
 //     return request.post('/update/order', data)
 // }
 
-// // 菜单权限
-// export const menuPermissions = (params) => {
-//     return request.get('/menu/permissions', { params })
-// }
+

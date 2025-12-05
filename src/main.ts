@@ -23,6 +23,17 @@ axios.defaults.baseURL = 'http://localhost:8080'
 // 允许跨域携带cookie
 axios.defaults.withCredentials = true
 
+// 刷新后的动态路由添加
+const localData = localStorage.getItem('pz_vuex')
+if (localData) {
+  // 将localData转换为json对象
+  store.commit('menu/dynamicMenu', JSON.parse(localData).menu.routerList)
+  store.state.menu.routerList.forEach((item: any) => {
+    router.addRoute('main',item)
+  })
+}
+
+// 登录验证拦截器
 router.beforeEach((to, from) => {
   console.log('开始验证token')
   // 1. 先处理localStorage返回undefined的情况
