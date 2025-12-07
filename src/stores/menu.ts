@@ -1,11 +1,13 @@
+const localData = localStorage.getItem('pz_vuex')
 
-const localData=localStorage.getItem('pz_vuex')
-
-const state =localData?localData.menu: {
-  isCollapse: false, // 是否折叠
-  selectMenu: [], // 当前选中的菜单
-  routerList:[], // 路由列表
-}
+const state = localData
+  ? localData.menu
+  : {
+      isCollapse: false, // 是否折叠
+      selectMenu: [], // 当前选中的菜单
+      routerList: [], // 路由列表
+      menuActive: '1-1', // 当前激活的菜单
+    }
 // 改变菜单状态
 const mutations = {
   // 折叠菜单
@@ -34,7 +36,7 @@ const mutations = {
     const modules = import.meta.glob('../views/**/**.vue')
     console.log('文件系统中的路由模块', modules)
     // 通过权限拼接路由路径
-    function routerSet(router: any) { 
+    function routerSet(router: any) {
       router.forEach((item: any) => {
         // 判断有没有子菜单，拼接路由数据
         if (item.children) {
@@ -56,8 +58,12 @@ const mutations = {
     // 拿到完整的路由路径
     routerSet(palyload)
     // 添加到路由列表中
-    state.routerList=palyload
-  }
+    state.routerList = palyload
+  },
+  // 更新选中菜单激活状态位置
+  updateMenuActive(state: any, palyload: any) {
+    state.menuActive = palyload
+  },
 }
 
 // 将数据存储到vuex中，方便全局使用

@@ -31,9 +31,11 @@ const props = defineProps(['menuData', 'index'])
 const router = useRouter()
 const store = useStore()
 
-const handleMenuClick = (item: any, active: string) => {
-  console.log(item, 'item')
+const handleMenuClick = (item: any, active: any) => {
+  // console.log(item, 'item')
+  console.log('当前点击菜单的值active：', active)
   store.commit('menu/addMenu', item.meta)
+  store.commit('menu/updateMenuActive', active)
   router.push(item.meta.path)
 }
 // console.log(props.menuData)

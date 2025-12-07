@@ -22,37 +22,55 @@ export const authAdmin = (params: any) => {
 
 // 获取菜单权限
 export const userGetMenu = () => {
-    return request.get('/user/getmenu')
+  return request.get('/user/getmenu')
 }
 // 创建菜单权限
 export const userSetmenu = (data: any) => {
-    return request.post('/user/setmenu', data)
+  return request.post('/user/setmenu', data)
 }
 
 // 菜单列表数据
-export const menuList = (params:any) => {
-    return request.get('/menu/list', { params })
+export const menuList = (params: any) => {
+  return request.get('/menu/list', { params })
 }
 
 // 菜单权限下拉列表
 export const menuSelectList = () => {
-    return request.get('/menu/selectlist')
+  return request.get('/menu/selectlist')
 }
 // 用户信息修改
-export const updateAuth = (data:any) => {
-    return request.post('/update/user', data)
+export const updateAuth = (data: any) => {
+  return request.post('/update/user', data)
 }
 
 // 菜单权限
-export const menuPermissions = (params:any) => {
-    return request.get('/menu/permissions', { params })
+export const menuPermissions = (params: any) => {
+  return request.get('/menu/permissions', { params })
+}
+
+// 获取头像
+export const photoList = () => {
+  return request.get('/photo/list')
+}
+
+// 陪护师创建
+export const companion = (data: any) => {
+  return request.post('/companion', data)
+}
+
+// 陪护师列表
+export const companionList = (params: any) => {
+  return request.get('/companion/list', { params })
+}
+
+// 删除陪护师
+export const deleteCompanion = (data: any) => {
+  return request.post('/delete/companion', data)
 }
 // 验证码验证
 // export const authentication = (data) => {
 //     return request.post('/user/authentication', data)
 // }
-
-
 
 // // 账号管理
 // export const authAdmin = (params={}) => {
@@ -62,36 +80,6 @@ export const menuPermissions = (params:any) => {
 // export const getControlData = (params={}) => {
 //     return request.get('/report', { params })
 // }
-
-// // 获取头像
-// export const photoList = () => {
-//     return request.get('/photo/list')
-// }
-
-// // 陪护师
-// export const companion = (data) => {
-//     return request.post('/companion', data)
-// }
-
-// // 陪护师列表
-// export const companionList = (params) => {
-//     return request.get('/companion/list', { params })
-// }
-
-// // 删除陪护师
-// export const deleteCompanion = (data) => {
-//     return request.post('/delete/companion', data)
-// }
-
-
-
-
-
-
-
-
-
-
 
 // // 订单列表
 
@@ -104,5 +92,3 @@ export const menuPermissions = (params:any) => {
 // export const updateOrder = (data) => {
 //     return request.post('/update/order', data)
 // }
-
-
