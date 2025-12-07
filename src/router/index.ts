@@ -8,8 +8,10 @@ import Order from '@/views/vppz/order/index.vue'
 import Staff from '@/views/vppz/staff/index.vue'
 import Dashboard from '@/views/dashboard/index.vue'
 
-const localData = localStorage.getItem('pz_vuex')
+// ✅ 正确：需要用缓存时「实时读取」（写在使用的函数内部）；❌ 错误：提前把缓存存在变量里（外层赋值），尤其是依赖登录状态的缓存。
+// const localData = localStorage.getItem('pz_vuex')
 
+// 静态路由，页面加载时就存在
 const mockRoutes = [
   {
     path: 'dashboard',
@@ -81,30 +83,53 @@ const mockRoutes = [
     ],
   },
 ]
-
 const routes = [
   {
     path: '/',
     name: 'main',
     component: Layout,
-    // 重定向第一个页面显示
-    // redirect: (to: any) => {
-    //   if (localData) {
-    //     try {
-    //       const { menu } = JSON.parse(localData)
-    //       if (!menu?.routerList?.length) return '/login'
-    //       const firstRoute = menu.routerList[0]
-    //       const targetPath = firstRoute.children?.[0]?.meta.path || firstRoute.meta.path
-    //       // 关键：校验目标路径是否存在于路由表中
-    //       const isRouteExist = router.getRoutes().some((item) => item.path === targetPath)
-    //       return isRouteExist ? targetPath : '/login'
-    //     } catch (e) {
-    //       return '/login'
-    //     }
-    //   }
-    //   return '/login'
+
+    redirect: (to: any) => {
+      console.log('==== 根路由redirect函数执行了 ====')
+      let finalPath = '/login' // 默认返回登录页
+      const localData = localStorage.getItem('pz_vuex') // 替换为实际key
+      if (localData) {
+        try {
+          const { menu } = JSON.parse(localData)
+          if (menu?.routerList?.length) {
+            const firstRoute = menu.routerList[0]
+            // 1. 打印所有解析环节的关键值
+            console.log('firstRoute:', firstRoute) // 看是否有meta.path
+            console.log('firstRoute.children:', firstRoute.children) // 看子路由
+            // 2. 解析目标路径
+            const targetPath = firstRoute.children?.[0]?.meta.path || firstRoute.meta.path
+            console.log('解析出的targetPath:', targetPath) // 重点：看是否是预期路径（如/dashboard）
+            // 3. 校验路由表是否存在该路径
+            const isRouteExist = router.getRoutes().some((item) => item.path === targetPath)
+            console.log(
+              '路由表是否包含targetPath:',
+              isRouteExist,
+              '路由表:',
+              router.getRoutes().map((i) => i.path),
+            )
+
+            // 4. 确定最终返回值
+            finalPath = isRouteExist ? targetPath : '/login'
+          }
+        } catch (e) {
+          console.error('redirect解析报错:', e)
+        }
+      }
+      console.log('redirect最终返回路径:', finalPath) // 关键：看最终返回的是啥
+      return finalPath
+    },
+
+    // 加这行：确认路由被注册
+    // beforeEnter: (to: any, from: any, next: any) => {
+    //   console.log('根路由beforeEnter执行了')
+    //   next()
     // },
-    // children: mockRoutes,//静态路由
+    //   // children: mockRoutes,//静态路由
     children: [], //动态渲染子路由
   },
   {
@@ -116,86 +141,5 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
 })
-
-// // 标记：是否已挂载动态路由
-// let hasAddedDynamicRoutes = false
-
-// // 封装：挂载动态路由 + 获取第一个页面路径
-// const initDynamicRoutes = () => {
-//   try {
-//     const localData = localStorage.getItem('pz_vuex')
-//     if (!localData) return null
-
-//     const { menu } = JSON.parse(localData)
-//     if (!menu?.routerList?.length) return null
-
-//     // 新增：检查每个菜单的 meta.path 是否存在
-//     const invalidMenus = menu.routerList.filter((route) => !route.meta?.path)
-//     if (invalidMenus.length > 0) {
-//       console.warn('以下菜单缺失 meta.path：', invalidMenus)
-//       // 可选：过滤掉无效菜单，避免后续报错
-//       menu.routerList = menu.routerList.filter((route) => route.meta?.path)
-//     }
-
-//     // 步骤1：转换菜单为动态路由规则（按你的菜单格式调整）
-//     const dynamicRoutes = menu.routerList.map((route) => {
-//       // 处理子菜单
-//       const childrenRoutes =
-//         route.children?.map((child) => ({
-//           path: child.meta.path.replace(/^\//, ''), // 去掉开头的/，避免嵌套路径错误
-//           name: child.name,
-//           component: () => import(`@/views/${child.component}.vue`), // 按实际组件路径改
-//         })) || []
-
-//       // 父菜单路由
-//       return {
-//         path: route.meta.path.replace(/^\//, ''),
-//         name: route.name,
-//         component: () => import(`@/views/${route.component}.vue`),
-//         children: childrenRoutes,
-//       }
-//     })
-
-//     // 步骤2：挂载动态路由到 main 路由下
-//     dynamicRoutes.forEach((route) => {
-//       router.addRoute('main', route) // Vue3 写法；Vue2 用 router.addRoutes([route])
-//     })
-
-//     hasAddedDynamicRoutes = true
-
-//     // 步骤3：返回第一个页面的路径（重定向目标）
-//     const firstRoute = menu.routerList[0]
-//     return firstRoute.children?.[0]?.meta.path || firstRoute.meta.path
-//   } catch (e) {
-//     console.error('初始化动态路由失败：', e)
-//     return null
-//   }
-// }
-
-// // 全局前置守卫（核心：先挂载路由，再重定向）
-// router.beforeEach(async (to, from, next) => {
-//   const token = localStorage.getItem('token')
-
-//   // 场景1：未登录 → 跳登录页
-//   if (!token) {
-//     return to.path === '/login' ? next() : next('/login')
-//   }
-
-//   // 场景2：已登录 → 先挂载动态路由
-//   if (!hasAddedDynamicRoutes) {
-//     const firstPagePath = initDynamicRoutes()
-//     // 挂载成功 + 目标路径存在 + 当前是跳 / → 直接重定向到第一个页面
-//     if (firstPagePath && to.path === '/') {
-//       return next(firstPagePath)
-//     }
-//     // 挂载失败 → 跳登录页
-//     if (!firstPagePath) {
-//       return next('/login')
-//     }
-//   }
-
-//   // 场景3：已挂载路由 → 正常放行
-//   next()
-// })
 
 export default router

@@ -137,12 +137,12 @@ const submitForm = async (formEl: any) => {
                 console.log('动态路由情况：', item)
                 router.addRoute('main', item)
               })
-              console.log('【所有已注册的完整路由表】', router.getRoutes())
+              // console.log('【所有已注册的完整路由表】', router.getRoutes())
               // 测试
-              const adminRoute = router.getRoutes().find((r) => r.path === '/auth/admin')
-              console.log('admin路由完整信息：', adminRoute)
-              console.log('admin路由的component：', adminRoute?.path)
-              console.log('component类型：', typeof adminRoute?.component)
+              // const adminRoute = router.getRoutes().find((r) => r.path === '/auth/admin')
+              // console.log('admin路由完整信息：', adminRoute)
+              // console.log('admin路由的component：', adminRoute?.path)
+              // console.log('component类型：', typeof adminRoute?.component)
               // router.push('/auth/admin')
               // console.log('刷新后路由', router.getRoutes().map(r => r.path))
               // 跳转到首页
