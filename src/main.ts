@@ -29,7 +29,7 @@ if (localData) {
   // 将localData转换为json对象
   store.commit('menu/dynamicMenu', JSON.parse(localData).menu.routerList)
   store.state.menu.routerList.forEach((item: any) => {
-    router.addRoute('main',item)
+    router.addRoute('main', item)
   })
 }
 
@@ -40,10 +40,10 @@ router.beforeEach((to, from) => {
   let token = localStorage.getItem('token')
   if (token === 'undefined' || token === 'null') {
     token = null
-    localStorage.removeItem('token'); // 清除异常值
+    localStorage.removeItem('token') // 清除异常值
   }
   console.log('处理后token值:', token, '目标路径:', to.path)
-    // 2. 有效token的判断：非null/undefined + 非空字符串
+  // 2. 有效token的判断：非null/undefined + 非空字符串
   const hasValidToken = !!token && token.trim() !== ''
   // 非登陆页面token不存在
   if (to.path !== '/login' && !hasValidToken) {
@@ -53,7 +53,7 @@ router.beforeEach((to, from) => {
     console.log('跳转首页页面')
     // 已登录状态访问login跳转首页
     return '/'
-  } 
+  }
 })
 
 // 创建vue实例
