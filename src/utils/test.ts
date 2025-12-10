@@ -1,134 +1,24 @@
-// import axios from 'axios'
-// import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-// import { ElMessage } from 'element-plus'
-// import router from '@/router'
-
-// const BASE_URL = 'http://127.0.0.1:8000/'
-// const TIMEOUT = 10000
-
-// const request: AxiosInstance = axios.create({
-//   baseURL: BASE_URL,
-//   timeout: TIMEOUT,
-//   headers: {
-//     'Content-Type': 'application/json;charset=utf-8',
-//   },
-// })
-
-// // 请求拦截器：使用 InternalAxiosRequestConfig 类型
-// request.interceptors.request.use(
-//   (config: InternalAxiosRequestConfig) => {
-//     const token = localStorage.getItem('access_token')
-//     if (token && config.headers) {
-//       config.headers.Authorization = `Bearer ${token}`
-//     }
-//     return config
-//   },
-//   (error: AxiosError) => {
-//     ElMessage.error('请求发送失败，请检查网络')
-//     return Promise.reject(error)
-//   },
-// )
-
-// // 响应拦截器
-// request.interceptors.response.use(
-//   (response: AxiosResponse) => {
-//     return response.data
-//   },
-//   (error: AxiosError) => {
-//     const status = error.response?.status
-//     switch (status) {
-//       case 401:
-//         localStorage.removeItem('access_token')
-//         localStorage.removeItem('refresh_token')
-//         ElMessage.error('登录已失效，请重新登录')
-//         router.push('/login')
-//         break
-//       case 403:
-//         ElMessage.error('没有权限访问该资源')
-//         break
-//       case 404:
-//         ElMessage.error('请求的资源不存在')
-//         break
-//       case 500:
-//         ElMessage.error('服务器内部错误，请稍后再试')
-//         break
-//       default:
-//         ElMessage.error(`请求失败：${error.message || '未知错误'}`)
-//     }
-//     return Promise.reject(error)
-//   },
-// )
-
-// export const http = {
-//   get<T = any>(url: string, config?: InternalAxiosRequestConfig): Promise<T> {
-//     return request.get(url, config)
-//   },
-//   post<T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig): Promise<T> {
-//     return request.post(url, data, config)
-//   },
-//   put<T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig): Promise<T> {
-//     return request.put(url, data, config)
-//   },
-//   delete<T = any>(url: string, config?: InternalAxiosRequestConfig): Promise<T> {
-//     return request.delete(url, config)
-//   },
-// }
-
-// export default request
-
-// src/utils/request.ts
-// import axios from 'axios'
-// import type { InternalAxiosRequestConfig, AxiosError } from 'axios'
-// import { ElMessage } from 'element-plus'
-
-// const request = axios.create({
-//   baseURL: 'http://127.0.0.1:8000', // 直接使用后端地址（已通过 Django CORS 允许跨域）
-//   timeout: 10000,
-//   withCredentials: true, // 允许携带凭证（配合后端 CORS_ALLOW_CREDENTIALS = True）
-// })
-
-// // 请求拦截器：添加 Token
-// request.interceptors.request.use(
-//   (config: InternalAxiosRequestConfig) => {
-//     const token = sessionStorage.getItem('access_token') // 从 sessionStorage 获取
-//     if (token && config.headers) {
-//       // 必须以 Bearer 前缀传递（后端 TestView 已适配这种格式）
-//       config.headers.Authorization = `Bearer ${token}`
-//     }
-//     return config
-//   },
-//   (error: AxiosError) => {
-//     ElMessage.error('请求发送失败')
-//     return Promise.reject(error)
-//   },
-// )
-
-// // 响应拦截器：直接返回后端数据（无需额外 .data 嵌套）
-// request.interceptors.response.use(
-//   (response) => response.data, // 后端返回的 { code, msg, data } 直接返回
-//   (error: AxiosError) => {
-//     ElMessage.error('请求失败')
-//     return Promise.reject(error)
-//   },
-// )
-
-// export default request
-
-// src/utils/request.ts
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
+let baseUrl="http://127.0.0.1:8000/";
+  
 const request = axios.create({
-  baseURL: 'http://127.0.0.1:8000', // 后端地址
+  baseURL: baseUrl, // 后端地址
   timeout: 10000,
   withCredentials: true, // 允许携带跨域凭证（与后端 CORS_ALLOW_CREDENTIALS 对应）
 })
 
 // 请求拦截器：添加 JWT Token
 request.interceptors.request.use(
-  (config) => {
+    (config) => {
+    // 打印最终请求的完整URL
+        console.log("最终请求URL：", config.baseURL + config.url); 
+        console.log("最终请求参数：", config.data);
+    // 从 sessionStorage 获取 Token
     const token = sessionStorage.getItem('access_token')
     if (token) {
+      // 如果存在 Token，则添加到请求头中
       config.headers.Authorization = `Bearer ${token}` // 以 Bearer 格式传递 Token
     }
     return config
@@ -141,11 +31,118 @@ request.interceptors.request.use(
 
 // 响应拦截器：直接返回后端数据
 request.interceptors.response.use(
-  (response) => response.data,
+  (response) =>
+    // 无响应拦截器时，你拿到的result是这个结构：
+    // Axios 默认返回的响应是一个包含多层的对象
+    // {
+    //   data: {code:200, token:"xxx"}, // 后端实际返回的数据
+    //   status: 200, // HTTP状态码
+    //   statusText: "OK",
+    //   headers: {...}, // 响应头
+    //   config: {...} // 请求配置
+    // }
+    // 直接返回后端数据,去掉 Axios 默认的包装
+    response.data,
   (error) => {
     ElMessage.error('请求失败')
     return Promise.reject(error)
   },
 )
 
-export default request
+/*网络请求部分*/
+
+/*
+ *  get请求
+ *  url:请求地址
+ *  params:参数
+ * */
+export function get(url: string, params = {}) {
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            method: 'get',
+            params: params
+        }).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+/*
+ *  post请求
+ *  url:请求地址
+ *  params:参数
+ * */
+export function post(url: string, params = {}) {
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            method: 'post',
+            data: params
+        }).then(response => {
+            console.log(response)
+            resolve(response);
+        }).catch(error => {
+            console.log(error)
+            reject(error);
+        });
+    });
+}
+
+/*
+ *  delete请求
+ *  url:请求地址
+ *  params:参数
+ * */
+export function del(url: string, params = {}) {
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            method: 'delete',
+            data: params
+        }).then(response => {
+            console.log(response)
+            resolve(response);
+        }).catch(error => {
+            console.log(error)
+            reject(error);
+        });
+    });
+}
+
+
+/*
+ *  文件上传
+ *  url:请求地址
+ *  params:参数
+ * */
+export function fileUpload(url: string, params = {}) {
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            method: 'post',
+            data: params,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export function getServerUrl(){
+    return baseUrl;
+}
+
+export default {
+    request,
+    get,
+    post,
+    del,
+    fileUpload,
+    getServerUrl
+}
+// export default request

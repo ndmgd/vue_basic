@@ -136,6 +136,14 @@ const routes = [
     path: '/login',
     component: Login,
   },
+  {
+    path: '/test',
+    component: () => import('@/views/corstest.vue'),
+  },
+  {
+    path: '/logintest',
+    component: () => import('@/views/test/loginTest.vue'),
+  }
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
