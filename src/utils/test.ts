@@ -42,7 +42,7 @@ request.interceptors.response.use(
     //   config: {...} // 请求配置
     // }
     // 直接返回后端数据,去掉 Axios 默认的包装
-    response.data,
+    response,
   (error) => {
     ElMessage.error('请求失败')
     return Promise.reject(error)
@@ -61,7 +61,7 @@ export function get(url: string, params = {}) {
         request({
             url: url,
             method: 'get',
-            params: params
+            params: params // 【关键】封装层已经把你传入的第二个参数，赋值给axios的params
         }).then(response => {
             resolve(response);
         }).catch(error => {

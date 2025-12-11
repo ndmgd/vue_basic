@@ -11,6 +11,7 @@
         <el-main>
           <router-view></router-view>
         </el-main>
+        <userdata />
       </el-container>
     </el-container>
   </div>
@@ -19,6 +20,7 @@
 <script setup lang="ts">
   import NavAside from '@/components/aside.vue'
   import Header from '@/components/navHeader.vue'
+  import userdata from '@/components/userdata.vue'
 </script>
 
 <style lang="less" scoped>

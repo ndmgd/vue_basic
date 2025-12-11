@@ -138,11 +138,11 @@ const routes = [
   },
   {
     path: '/test',
-    component: () => import('@/views/corstest.vue'),
+    component: () => import('@/views/test/corstest.vue'),
   },
   {
     path: '/logintest',
-    component: () => import('@/views/test/loginTest.vue'),
+    component: () => import('@/views/test/login/loginTest.vue'),
   }
 ]
 const router = createRouter({
